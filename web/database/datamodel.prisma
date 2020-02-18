@@ -5,3 +5,71 @@ type User {
   email: String
   avatarUrl: String
 }
+
+enum PublicationState {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+type Movement {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  name: String! @unique
+  slug: String! @unique
+  summary: String
+  state: PublicationState! @default(value: DRAFT)
+  photos: [Photo!]!
+  videos: [Video!]!
+  tracks: [Track!]!
+  article: Article @relation(link: INLINE)
+}
+
+type Photo {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  title: String
+  fileUrl: String!
+  description: String
+  notes: String
+  state: PublicationState! @default(value: PUBLISHED)
+  movements: [Movement!]! @relation(link: TABLE)
+}
+
+type Video {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  title: String
+  fileUrl: String!
+  description: String
+  notes: String
+  state: PublicationState! @default(value: PUBLISHED)
+  movements: [Movement!]! @relation(link: TABLE)
+}
+
+type Track {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  title: String
+  fileUrl: String!
+  description: String
+  notes: String
+  state: PublicationState! @default(value: PUBLISHED)
+  movements: [Movement!]! @relation(link: TABLE)
+}
+
+type Article {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  title: String!
+  version: Int! @default(value: 1)
+  text: String
+  description: String
+  notes: String
+  state: PublicationState! @default(value: DRAFT)
+}
